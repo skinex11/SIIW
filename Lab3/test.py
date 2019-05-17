@@ -11,7 +11,7 @@ def calculate_points(x, y, board):
 
     # sprawdzam ukosy
     isFull = True
-    counter = 1
+    counter = 0
     # sprawdzamy górną lewą przekątną
     if not (x is 0 or y is 0):
         for i, col in zip(range(x, -1, -1), range(y, -1, -1)):
@@ -22,6 +22,8 @@ def calculate_points(x, y, board):
 
     # sprawdzamy dolną prawą przekątną
     if isFull and not (x is 3 or y is 3):
+        if counter is not 0:
+            counter -= 1
         for i, column in zip(range(x, 4, 1), range(y, 4, 1)):
             counter += 1
             if board[i][column] == 0:
@@ -42,6 +44,8 @@ def calculate_points(x, y, board):
 
     # sprawdzamy dolną lewą przekątną
     if isFull and not (x is 3 or y is 0):
+        if counter is not 0:
+            counter -= 1
         for i, col in zip(range(x, 4, 1), range(y, -1, -1)):
             counter += 1
             if board[i][col] == 0:
@@ -51,11 +55,11 @@ def calculate_points(x, y, board):
         points += counter
     return points
 
-board = [[0,1,1,0],
+board = [[1,1,1,1],
          [1,0,1,0],
-         [1,0,0,1],
-         [0,1,0,0]]
-points = calculate_points(2,0,board)
+         [1,1,0,1],
+         [0,1,1,1]]
+points = calculate_points(2,3,board)
 print(points)
 for e in board:
     print(e)
