@@ -15,10 +15,10 @@ class Board:
                 temp.append(0)
             self.board.append(temp)
 
-    def place(self, x, y, player, board):
-        if self.can_be_placed(x, y, board):
-            board[x][y] = player.number
-            points = self.calculate_points(x, y, board)
+    def place(self, x, y, player):
+        if self.can_be_placed(x, y, self.board):
+            self.board[x][y] = player.number
+            points = self.calculate_points(x, y, self.board)
             if points:
                 player.points += points
             return True
@@ -31,12 +31,12 @@ class Board:
     def calculate_points(self, x, y, board):
         points = 0
 
-        #sprawdzam poziomo
-        if any(element is 0 for element in board[x]):
+        # sprawdzam poziomo
+        if all(element is not 0 for element in board[x]):
             points += self.size
 
-        #sprawdzam pionowo
-        if any(board[i][y] is 0 for i in range(0, self.size)):
+        # sprawdzam pionowo
+        if all(board[i][y] is not 0 for i in range(0, 4)):
             points += self.size
 
         # sprawdzam ukosy
@@ -84,3 +84,20 @@ class Board:
         if isFull:
             points += counter
         return points
+
+    def print(self):
+        for row in self.board:
+            print(row)
+
+if __name__ == '__main__':
+    gra = Board(4)
+    gracz1 = Player(1)
+    gracz2 = Player(2)
+
+    gra.place(1,1,gracz1)
+    print(gracz1.points, gracz2.points)
+    gra.place(0,1,gracz1)
+    gra.place(2, 1, gracz2)
+    gra.place(3, 1, gracz2)
+    gra.print()
+    print(gracz1.points, gracz2.points)
