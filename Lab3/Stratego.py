@@ -1,3 +1,6 @@
+import random
+
+
 class Player:
     def __init__(self, number):
         self.number = number
@@ -89,15 +92,23 @@ class Board:
         for row in self.board:
             print(row)
 
+    def random_game(self, p1, p2):
+        i = 0
+        while self.is_not_full():
+            x, y = random.randint(0, self.size-1), random.randint(0, self.size-1)
+            if self.place(x, y, i):
+                i += 1
+
+
+    def is_not_full(self):
+        for row in self.board:
+            for element in row:
+                if element is 0:
+                    return True
+        return False
+
+
 if __name__ == '__main__':
     gra = Board(4)
     gracz1 = Player(1)
     gracz2 = Player(2)
-
-    gra.place(1,1,gracz1)
-    print(gracz1.points, gracz2.points)
-    gra.place(0,1,gracz1)
-    gra.place(2, 1, gracz2)
-    gra.place(3, 1, gracz2)
-    gra.print()
-    print(gracz1.points, gracz2.points)

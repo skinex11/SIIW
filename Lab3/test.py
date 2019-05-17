@@ -59,7 +59,4 @@ board = [[1,1,1,1],
          [1,0,1,0],
          [1,1,0,1],
          [0,1,1,1]]
-points = calculate_points(2,3,board)
-print(points)
-for e in board:
-    print(e)
+print()
