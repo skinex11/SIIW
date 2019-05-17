@@ -39,39 +39,48 @@ class Board:
         if any(board[i][y] is 0 for i in range(0, self.size)):
             points += self.size
 
-        #sprawdzam ukosy
+        # sprawdzam ukosy
         isFull = True
         counter = 0
-        #sprawdzamy górną lewą przekątną
-        for i, col in zip(range(x, -1, -1), range(y, -1, -1)):
-            counter += 1
-            if board[i][col] == 0:
-                isFull = False
-                break
-
-        # sprawdzamy dolną prawą przekątną
-        if isFull:
-            for i, column in zip(range(x, self.size, 1), range(y, -1, -1)):
-                counter += 1
-                if board[i][column] == 0:
-                    isFull = False
-                    break
-            points += counter
-        counter = 0
-
-        # sprawdzamy górną prawą przekątną
-        for i, col in zip(range(x, -1, 1), range(y, -1, -1)):
-            counter += 1
-            if board[i][col] == 0:
-                isFull = False
-                break
-
-        #sprawdzamy dolną lewą przekątną
-        if isFull:
-            for i, col in zip(range(x, self.size, -1), range(y, -1, -1)):
+        # sprawdzamy górną lewą przekątną
+        if not (x is 0 or y is 0):
+            for i, col in zip(range(x, -1, -1), range(y, -1, -1)):
                 counter += 1
                 if board[i][col] == 0:
                     isFull = False
                     break
+
+        # sprawdzamy dolną prawą przekątną
+        if isFull and not (x is 3 or y is 3):
+            if counter is not 0:
+                counter -= 1
+            for i, column in zip(range(x, self.size, 1), range(y, self.size, 1)):
+                counter += 1
+                if board[i][column] == 0:
+                    isFull = False
+                    break
+        if isFull:
+            points += counter
+        counter = 0
+        isFull = True
+
+        # sprawdzamy górną prawą przekątną
+        if not (x is 0 or y is 3):
+            for i, col in zip(range(x, -1, -1), range(y, self.size, 1)):
+                counter += 1
+                if board[i][col] == 0:
+                    isFull = False
+                    break
+
+        # sprawdzamy dolną lewą przekątną
+        if isFull and not (x is 3 or y is 0):
+            if counter is not 0:
+                counter -= 1
+            for i, col in zip(range(x, self.size, 1), range(y, -1, -1)):
+                counter += 1
+                if board[i][col] == 0:
+                    isFull = False
+                    break
+        if isFull:
             points += counter
         return points
