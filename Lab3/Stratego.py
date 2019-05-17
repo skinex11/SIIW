@@ -39,4 +39,39 @@ class Board:
         if any(board[i][y] is 0 for i in range(0, self.size)):
             points += self.size
 
-        
+        #sprawdzam ukosy
+        isFull = True
+        counter = 0
+        #sprawdzamy górną lewą przekątną
+        for i, col in zip(range(x, -1, -1), range(y, -1, -1)):
+            counter += 1
+            if board[i][col] == 0:
+                isFull = False
+                break
+
+        # sprawdzamy dolną prawą przekątną
+        if isFull:
+            for i, column in zip(range(x, self.size, 1), range(y, -1, -1)):
+                counter += 1
+                if board[i][column] == 0:
+                    isFull = False
+                    break
+            points += counter
+        counter = 0
+
+        # sprawdzamy górną prawą przekątną
+        for i, col in zip(range(x, -1, 1), range(y, -1, -1)):
+            counter += 1
+            if board[i][col] == 0:
+                isFull = False
+                break
+
+        #sprawdzamy dolną lewą przekątną
+        if isFull:
+            for i, col in zip(range(x, self.size, -1), range(y, -1, -1)):
+                counter += 1
+                if board[i][col] == 0:
+                    isFull = False
+                    break
+            points += counter
+        return points
