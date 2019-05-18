@@ -1,3 +1,4 @@
+import math
 import random
 
 
@@ -92,13 +93,15 @@ class Board:
         for row in self.board:
             print(row)
 
-    def random_game(self, p1, p2):
+    def random_game(self, players):
         i = 0
         while self.is_not_full():
             x, y = random.randint(0, self.size-1), random.randint(0, self.size-1)
-            if self.place(x, y, i):
+            # %2 -> zmiana graczy
+            if self.place(x, y, players[i % 2]):
                 i += 1
-
+        self.print()
+        print(players[0].points, players[1].points)
 
     def is_not_full(self):
         for row in self.board:
@@ -107,8 +110,36 @@ class Board:
                     return True
         return False
 
+    #max_turn=1 p1 maksymalizuje, max_turn=2 p2 minimalizuje
+    def minimax(self, cur_depth, maximizing_player, p1, p2):
+        if cur_depth is 0 or not self.is_not_full():
+            return p1.points - p2.points
+
+        if maximizing_player:
+            value = -math.inf
+
+            for x in range (0, self.size):
+                for y in range(0, self.size):
+                    if self.can_be_placed(x, y, self.board):
+                        self.board[x][y] = 1
+                        value = max(value, self.minimax(cur_depth-1, False, p1, p2))
+                        self.board[x][y] = 0
+        else:
+            value = math.inf
+
+
 
 if __name__ == '__main__':
-    gra = Board(4)
-    gracz1 = Player(1)
-    gracz2 = Player(2)
+    game = Board(5)
+    game2 = Board(5)
+    p1 = Player(1)
+    p2 = Player(2)
+    players = [p1, p2]
+
+    game.random_game(players)
+    p1 = Player(1)
+    p2 = Player(2)
+    players = [p1, p2]
+    game2.minmax(5, 1, players)
+    game2.print()
+    print(p1.points, p2.points)
