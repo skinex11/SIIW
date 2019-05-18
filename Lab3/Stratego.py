@@ -110,10 +110,35 @@ class Board:
                     return True
         return False
 
-    #max_turn=1 p1 maksymalizuje, max_turn=2 p2 minimalizuje
-    def minimax(self, cur_depth, maximizing_player, p1, p2):
+    def minmax_game(self, players):
+        i = 0
+        while self.is_not_full():
+            x, y = self.minmax_decision()
+            if self.place(x, y, players[i % 2]):
+                i += 1
+        self.print()
+        print(players[0].points, players[1].points)
+
+    def minmax_decision(self):
+        best_cordinates = [0, 0]
+        best_value = -math.inf
+
+        for x in range(0, self.size):
+            for y in range(0, self.size):
+                if self.can_be_placed(x, y, self.board):
+                    self.board[x][y] = 1
+                    #zapisuje punkty za konkretny ruch
+                    points = self.calculate_points(x, y, self.board)
+                    value = self.minimax(1, False, points, 0)
+                    if value > best_value:
+                        best_value = value
+                        best_cordinates = [x, y]
+                    self.board[x][y] = 0
+        return best_cordinates
+
+    def minimax(self, cur_depth, maximizing_player, points1, points2):
         if cur_depth is 0 or not self.is_not_full():
-            return p1.points - p2.points
+            return points1 - points2
 
         if maximizing_player:
             value = -math.inf
@@ -122,11 +147,20 @@ class Board:
                 for y in range(0, self.size):
                     if self.can_be_placed(x, y, self.board):
                         self.board[x][y] = 1
-                        value = max(value, self.minimax(cur_depth-1, False, p1, p2))
+                        points1 += self.calculate_points(x, y, self.board)
+                        value = max(value, self.minimax(cur_depth - 1, 2, points1, points2))
                         self.board[x][y] = 0
         else:
             value = math.inf
 
+            for x in range(0, self.size):
+                for y in range(0, self.size):
+                    if self.can_be_placed(x, y, self.board):
+                        self.board[x][y] = 2
+                        points2 += self.calculate_points(x, y, self.board)
+                        value = min(value, self.minimax(cur_depth - 1, 1, points1, points2))
+                        self.board[x][y] = 0
+        return value
 
 
 if __name__ == '__main__':
@@ -137,9 +171,6 @@ if __name__ == '__main__':
     players = [p1, p2]
 
     game.random_game(players)
-    p1 = Player(1)
-    p2 = Player(2)
-    players = [p1, p2]
-    game2.minmax(5, 1, players)
-    game2.print()
-    print(p1.points, p2.points)
+    p1.points = 0
+    p2.points = 0
+    game2.minmax_game(players)
