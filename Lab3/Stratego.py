@@ -164,8 +164,9 @@ class Board:
 
 
 if __name__ == '__main__':
-    game = Board(5)
-    game2 = Board(5)
+    N = 5
+    game = Board(N)
+    game2 = Board(N)
     p1 = Player(1)
     p2 = Player(2)
     players = [p1, p2]
