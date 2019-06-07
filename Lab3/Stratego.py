@@ -40,7 +40,7 @@ class Board:
             points += self.size
 
         # sprawdzam pionowo
-        if all(board[i][y] is not 0 for i in range(0, 4)):
+        if all(board[i][y] is not 0 for i in range(0, len(board))):
             points += self.size
 
         # sprawdzam ukosy
@@ -100,7 +100,7 @@ class Board:
             # %2 -> zmiana graczy
             if self.place(x, y, players[i % 2]):
                 i += 1
-        self.print()
+        #self.print()
         print(players[0].points, players[1].points)
 
     def is_not_full(self):
@@ -164,7 +164,7 @@ class Board:
 
 
 if __name__ == '__main__':
-    N = 5
+    N = 4
     game = Board(N)
     game2 = Board(N)
     p1 = Player(1)
